@@ -1,6 +1,7 @@
 const Panier = {
     data() {
         return {
+            tva : 1.2,
             panier: [
                 {article: "Cahier", quantite: 2, prix: 5.30},
                 {article: "Crayon", quantite: 4, prix: 1.10},
@@ -20,11 +21,37 @@ const Panier = {
             })
             return total.toFixed(2)
         },
+        totaltva() {
+            let total = 0
+            this.panier.forEach(el => {
+                total += el.prix * el.quantite
+            })
+            return (total * this.tva).toFixed(2)
+        },
+        showPoubelle() {
+            if(this.poubelle.lenght==0){
+                return false;
+            } else {
+                return true;
+            }
+        }
     },
     methods: {
+        isNumeric: function (n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        },
         ajouter() {
-            this.panier.push(this.input)
-            this.input = { article: '', quantite: 0, prix: 0 }
+            if(this.input['article'] == '' || this.input['quantite']== 0 || this.input['prix']== 0){
+                
+            }
+            else{
+                if(this.isNumeric(this.input['quantite']== true || this.isNumeric(this.input['prix'])== true )){
+
+                }else{
+                    this.panier.push(this.input)
+                    this.input = { article: '', quantite: 0, prix: 0 }
+                }
+            }
         },
         modifier(index) {
             this.input = this.panier[index]
@@ -32,8 +59,17 @@ const Panier = {
             this.$refs.modif.focus()
         },
         supprimer(index) {
+            this.poubelle.push(this.panier[index])
             this.panier.splice(index, 1)
+        },
+        retablir(index) {
+            this.panier.push(this.poubelle[index])
+            this.poubelle.splice(index, 1)
+        },
+        supprimerDef(index) {
+            this.poubelle.splice(index, 1)
         }
+        
     }
 }
 
